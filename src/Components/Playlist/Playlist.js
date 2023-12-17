@@ -1,11 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TrackList from '../TrackList/TrackList';
 import './Playlist.css';
 
 function Playlist({ playlistName, playlistTracks, onNameChange, onRemove }) {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleNameClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleNameChange = (e) => {
+    onNameChange(e.target.value);
+  };
+
+  const handleNameBlur = () => {
+    setIsEditing(false);
+  };
+
   return (
     <div className="Playlist">
-      <input defaultValue={playlistName} onChange={e => onNameChange(e.target.value)} />
+      {isEditing ? (
+        <input 
+          className="Playlist-input" 
+          defaultValue={playlistName} 
+          onChange={handleNameChange} 
+          onBlur={handleNameBlur} 
+          autoFocus
+        />
+      ) : (
+        <div className="Playlist-title" onClick={handleNameClick}>
+          {playlistName}
+        </div>
+      )}
       <TrackList tracks={playlistTracks} onRemove={onRemove} isRemoval={true} />
       <button className="Playlist-save">SAVE TO SPOTIFY</button>
     </div>
@@ -13,4 +39,3 @@ function Playlist({ playlistName, playlistTracks, onNameChange, onRemove }) {
 }
 
 export default Playlist;
-
