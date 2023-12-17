@@ -26,6 +26,10 @@ function App() {
     setPlaylistTracks(playlistTracks.filter(savedTrack => savedTrack.id !== track.id));
   };
 
+  const updatePlaylistName = (newName) => {
+    setPlaylistName(newName);
+  };
+
   return (
     <div className="App">
       <SearchBar />
@@ -34,7 +38,7 @@ function App() {
         <Playlist 
           playlistName={playlistName} 
           playlistTracks={playlistTracks}
-          onNameChange={setPlaylistName}
+          onNameChange={updatePlaylistName}
           onRemove={removeTrackFromPlaylist}
         />
       </div>
