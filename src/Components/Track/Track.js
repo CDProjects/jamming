@@ -1,9 +1,13 @@
 import React from 'react';
 import './Track.css';
 
-function Track({ track, onAdd }) {
+function Track({ track, onAdd, onRemove, isRemoval }) {
   const addTrack = () => {
     onAdd(track);
+  };
+
+  const removeTrack = () => {
+    onRemove(track);
   };
 
   return (
@@ -12,10 +16,13 @@ function Track({ track, onAdd }) {
         <h3>{track.name}</h3>
         <p>{track.artist} | {track.album}</p>
       </div>
-      <button className="Track-action" onClick={addTrack}>+</button>
+      {
+        isRemoval 
+        ? <button className="Track-action" onClick={removeTrack}>-</button>
+        : <button className="Track-action" onClick={addTrack}>+</button>
+      }
     </div>
   );
 }
 
 export default Track;
-
