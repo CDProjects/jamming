@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Spotify from './Spotify'; // Path to Spotify.js
 import SearchBar from './SearchBar/SearchBar';
 import SearchResults from './SearchResults/SearchResults';
 import Playlist from './Playlist/Playlist';
 import './App.css';
 
 function App() {
+  useEffect(() => {
+    Spotify.getAccessToken();
+  }, []);
+
   const [searchResults, setSearchResults] = useState([
     // Existing mock search results
   ]);
+
   const [playlistName, setPlaylistName] = useState('My Playlist');
   const [playlistTracks, setPlaylistTracks] = useState([
     { id: 1, name: 'Track 1', artist: 'Artist 1', album: 'Album 1', uri: 'spotify:track:5Er1BdhfwUWxWFO8pxAYwD' },
@@ -35,7 +41,7 @@ function App() {
   const savePlaylist = () => {
     const trackURIs = playlistTracks.map(track => track.uri);
     console.log('Saving playlist to Spotify with URIs:', trackURIs);
-    // Here you will eventually interact with the Spotify API
+    // Here will interact with the Spotify API
 
     // Reset the playlist after saving
     setPlaylistName('New Playlist');
@@ -50,7 +56,7 @@ function App() {
         <Playlist 
           playlistName={playlistName} 
           playlistTracks={playlistTracks}
-          onNameChange={setPlaylistName}
+          onNameChange={updatePlaylistName}
           onRemove={removeTrackFromPlaylist}
           onSave={savePlaylist}
         />
