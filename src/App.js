@@ -48,9 +48,15 @@ function App() {
     setPlaylistTracks([]);
   };
 
+  const search = (term) => {
+    Spotify.search(term).then(searchResults => {
+      setSearchResults(searchResults);
+    });
+  };
+
   return (
     <div className="App">
-      <SearchBar />
+      <SearchBar onSearch={search} />
       <div className="App-playlist">
         <SearchResults searchResults={searchResults} onAdd={addTrackToPlaylist} />
         <Playlist 
