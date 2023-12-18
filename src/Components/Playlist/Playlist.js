@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import TrackList from '../TrackList/TrackList';
 import './Playlist.css';
 
-function Playlist({ playlistName, playlistTracks, onNameChange, onRemove }) {
+function Playlist({ playlistName, playlistTracks, onNameChange, onRemove, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleNameClick = () => {
@@ -33,7 +33,7 @@ function Playlist({ playlistName, playlistTracks, onNameChange, onRemove }) {
         </div>
       )}
       <TrackList tracks={playlistTracks} onRemove={onRemove} isRemoval={true} />
-      <button className="Playlist-save">SAVE TO SPOTIFY</button>
+      <button className="Playlist-save" onClick={onSave}>SAVE TO SPOTIFY</button>
     </div>
   );
 }
