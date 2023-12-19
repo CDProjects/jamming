@@ -1,5 +1,5 @@
-const clientId = "Y_SPOTIFY_CLIENT_ID"; // Replace with my client ID from Spotify
-const redirectUri = "http://localhost:3000/"; // Replace with my redirect URI
+const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID; // Replace with my client ID from Spotify .env file
+const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI; // Replace with my redirect URI
 
 let accessToken;
 
