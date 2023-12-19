@@ -1,5 +1,5 @@
-const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID; // Replace with my client ID from Spotify .env file
-const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI; // Replace with my redirect URI
+const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID; // See .env file
+const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI; // See .env file
 
 let accessToken;
 
