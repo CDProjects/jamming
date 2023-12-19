@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Spotify from "./Spotify"; // Path to Spotify.js
-import SearchBar from "./SearchBar/SearchBar";
-import SearchResults from "./SearchResults/SearchResults";
-import Playlist from "./Playlist/Playlist";
+import SearchBar from "./Components/SearchBar/SearchBar";
+import SearchResults from "./Components/SearchResults/SearchResults";
+import Playlist from "./Components/Playlist/Playlist";
 import "./App.css";
 
 function App() {
