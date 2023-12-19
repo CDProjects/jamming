@@ -44,6 +44,8 @@ function App() {
     },
   ]);
 
+  const [errorMessage, setErrorMessage] = useState(""); // State to manage error messages
+
   const addTrackToPlaylist = (track) => {
     if (playlistTracks.find((savedTrack) => savedTrack.id === track.id)) {
       return;
@@ -72,19 +74,28 @@ function App() {
   };
 
   const search = (term) => {
+    if (!term) {
+      setErrorMessage("Please enter a search term.");
+      return;
+    }
+
     Spotify.search(term)
       .then((searchResults) => {
         setSearchResults(searchResults);
+        setErrorMessage(""); // Clear error message on successful search
       })
       .catch((error) => {
         console.error("Error during Spotify search:", error);
         setSearchResults([]); // Reset search results in case of error
+        setErrorMessage("Failed to fetch search results."); // Set error message
       });
   };
 
   return (
     <div className="App">
       <SearchBar onSearch={search} />
+      {errorMessage && <div className="error-message">{errorMessage}</div>}{" "}
+      {/* Display error message */}
       <div className="App-playlist">
         <SearchResults
           searchResults={searchResults}
