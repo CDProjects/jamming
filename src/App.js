@@ -10,41 +10,10 @@ function App() {
     Spotify.getAccessToken();
   }, []);
 
-  const [searchResults, setSearchResults] = useState([]); // Start with an empty array
-
+  const [searchResults, setSearchResults] = useState([]);
   const [playlistName, setPlaylistName] = useState("My Playlist");
-  const [playlistTracks, setPlaylistTracks] = useState([
-    {
-      id: 1,
-      name: "Track 1",
-      artist: "Artist 1",
-      album: "Album 1",
-      uri: "spotify:track:5Er1BdhfwUWxWFO8pxAYwD",
-    },
-    {
-      id: 2,
-      name: "Track 2",
-      artist: "Artist 2",
-      album: "Album 2",
-      uri: "spotify:track:1tqArbKc1vM3R0BgeZ6055",
-    },
-    {
-      id: 3,
-      name: "Track 3",
-      artist: "Artist 3",
-      album: "Album 3",
-      uri: "spotify:track:5RrGnZMEmSscpbcEftbt70",
-    },
-    {
-      id: 4,
-      name: "Track 4",
-      artist: "Artist 4",
-      album: "Album 4",
-      uri: "spotify:track:6lJJcUjhsp0TJRuzUIPOYO",
-    },
-  ]);
-
-  const [errorMessage, setErrorMessage] = useState(""); // State to manage error messages
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const addTrackToPlaylist = (track) => {
     if (playlistTracks.find((savedTrack) => savedTrack.id === track.id)) {
@@ -54,60 +23,49 @@ function App() {
   };
 
   const removeTrackFromPlaylist = (track) => {
-    setPlaylistTracks(
-      playlistTracks.filter((savedTrack) => savedTrack.id !== track.id)
-    );
+    setPlaylistTracks(playlistTracks.filter((savedTrack) => savedTrack.id !== track.id));
   };
 
   const updatePlaylistName = (newName) => {
     setPlaylistName(newName);
   };
 
-  const savePlaylist = () => {
+  const savePlaylist = async () => {
     const trackURIs = playlistTracks.map((track) => track.uri);
-    console.log("Saving playlist to Spotify with URIs:", trackURIs);
-    // Here will interact with the Spotify API
-
-    // Reset the playlist after saving
-    setPlaylistName("New Playlist");
-    setPlaylistTracks([]);
+    try {
+      await Spotify.savePlaylist(playlistName, trackURIs);
+      setPlaylistName("New Playlist");
+      setPlaylistTracks([]);
+    } catch (error) {
+      console.error("Error during playlist save:", error);
+      // Handle the error, possibly update state with an error message
+    }
   };
 
-  const search = (term) => {
+  const search = async (term) => {
     if (!term) {
       setErrorMessage("Please enter a search term.");
       return;
     }
 
-    Spotify.search(term)
-      .then((searchResults) => {
-        setSearchResults(searchResults);
-        setErrorMessage(""); // Clear error message on successful search
-      })
-      .catch((error) => {
-        console.error("Error during Spotify search:", error);
-        setSearchResults([]); // Reset search results in case of error
-        setErrorMessage("Failed to fetch search results."); // Set error message
-      });
+    try {
+      const results = await Spotify.search(term);
+      setSearchResults(results);
+      setErrorMessage(""); // Clear error message on successful search
+    } catch (error) {
+      console.error("Error during Spotify search:", error);
+      setSearchResults([]); // Reset search results in case of error
+      setErrorMessage("Failed to fetch search results. Please try again."); // Set an error message to display to the user
+    }
   };
 
   return (
     <div className="App">
       <SearchBar onSearch={search} />
-      {errorMessage && <div className="error-message">{errorMessage}</div>}{" "}
-      {/* Display error message */}
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <div className="App-playlist">
-        <SearchResults
-          searchResults={searchResults}
-          onAdd={addTrackToPlaylist}
-        />
-        <Playlist
-          playlistName={playlistName}
-          playlistTracks={playlistTracks}
-          onNameChange={updatePlaylistName}
-          onRemove={removeTrackFromPlaylist}
-          onSave={savePlaylist}
-        />
+        <SearchResults searchResults={searchResults} onAdd={addTrackToPlaylist} />
+        <Playlist playlistName={playlistName} playlistTracks={playlistTracks} onNameChange={updatePlaylistName} onRemove={removeTrackFromPlaylist} onSave={savePlaylist} />
       </div>
     </div>
   );
