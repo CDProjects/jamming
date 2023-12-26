@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import Spotify from "./Spotify"; // Path to Spotify.js
 import './SearchBar.css';
 
-function SearchBar() {
+function SearchBar({ onSearch }) {
   const [term, setTerm] = useState('');
 
   const handleTermChange = (event) => {
@@ -11,12 +10,12 @@ function SearchBar() {
 
   const handleSearch = async () => {
     try {
-      const results = await Spotify.search(term);
-      // Assuming you have a method to update the search results in your state
-      // updateSearchResults(results);
+      // Call the onSearch prop function passed down from the parent component
+      // This function is responsible for updating the search results in the state of the App component
+      await onSearch(term);
     } catch (error) {
       console.error("Error during Spotify search:", error);
-      // Handle the error, possibly update state with an error message
+      // If I have a method to update an error message in the App's state, you would call it here
     }
   };
 
