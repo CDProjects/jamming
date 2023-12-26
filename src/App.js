@@ -6,14 +6,27 @@ import Playlist from "./Components/Playlist/Playlist";
 import "./App.css";
 
 function App() {
-  useEffect(() => {
-    Spotify.getAccessToken();
-  }, []);
-
   const [searchResults, setSearchResults] = useState([]);
   const [playlistName, setPlaylistName] = useState("My Playlist");
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const fetchAccessToken = async () => {
+      try {
+        const token = await Spotify.getAccessToken();
+        if (token) {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error("Error during access token retrieval:", error);
+        setErrorMessage("Error during access token retrieval.");
+      }
+    };
+
+    fetchAccessToken();
+  }, []);
 
   const addTrackToPlaylist = (track) => {
     if (playlistTracks.find((savedTrack) => savedTrack.id === track.id)) {
@@ -38,7 +51,7 @@ function App() {
       setPlaylistTracks([]);
     } catch (error) {
       console.error("Error during playlist save:", error);
-      // Handle the error, possibly update state with an error message
+      setErrorMessage("Error during playlist save.");
     }
   };
 
